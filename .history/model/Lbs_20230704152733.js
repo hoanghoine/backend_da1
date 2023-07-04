@@ -2,7 +2,7 @@ import { DataTypes, Sequelize } from "sequelize";
 import isEmail, {body, validationResult} from "express-validator";
 import moment from "moment-timezone";
 
-const sequelize = new Sequelize(process.env.DBNAME,process.env.USERDB,process.env.PASSWORDDB,{
+const sequelize = new Sequelize('doan1','root','123456',{
     host: process.env.HOSTDB,
     dialect: 'mysql',
     

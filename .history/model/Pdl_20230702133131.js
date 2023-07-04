@@ -1,8 +1,8 @@
 import { DataTypes, Sequelize } from "sequelize";
 import moment from "moment-timezone";
 
-const sequelize = new Sequelize(process.env.DBNAME,process.env.USERDB,process.env.PASSWORDDB, {
-    host: process.env.HOSTDB,
+const sequelize = new Sequelize("doan1", "root", "123456", {
+    host: "127.0.0.1",
     dialect: "mysql",
     
     timezone: "Asia/Bangkok",
