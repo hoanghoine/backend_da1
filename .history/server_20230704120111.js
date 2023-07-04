@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import connect from "./database/database.js";
 import { OutPutType, print } from "./helper/print.js";
 import { patientRouter, doctorRouter, bookingRouter,find,managementRouter } from "./router/index.js";
+  
 import bodyParser from 'body-parser'
 
 dotenv.config()
