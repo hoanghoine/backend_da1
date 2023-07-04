@@ -7,7 +7,8 @@
   
   "scripts": {
     "start": "nodemon server.js",
-    "debug": "node inspect server.js"
+    "debug": "node inspect server.js",
+    "build": "npm run build"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
