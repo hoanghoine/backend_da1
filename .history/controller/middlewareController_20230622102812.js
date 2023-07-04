@@ -65,7 +65,7 @@ const middlewareVerifyToken = {
             
             middlewareVerifyToken.verifyToken(req,res,()=> {
                 
-                if((req.user.id == req.params.id)|| req.user.role == 2) {
+                if(req.user.id == req.params.id) {
                     next()
                 }
                 
