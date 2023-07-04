@@ -28,7 +28,9 @@ async function connect(){
             }
             
         });
-        
+        var connection = mysql.createConnection("mysql://ibj8zxnqiw035hkj:zne10totfttebswj@frwahxxknm9kwy6c.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/fvoo4f7v7wt2h5lg");
+
+        connection.connect();
 
         
         // return con

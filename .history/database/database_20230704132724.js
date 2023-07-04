@@ -7,7 +7,7 @@ import Exception from "../error/Exception.js"
 async function connect(){
     // debugger
     try{
-        let con = await mysql.createConnection({
+        let con =  mysql.createConnection({
             host: process.env.HOSTDB,
             user: process.env.USERDB,
             password: process.env.PASSWORDDB,
@@ -15,12 +15,8 @@ async function connect(){
             port: process.env.DBPORT,  
             timezone: 'Asia/Bangkok',
         })
-        // console.log(con)
         await con.connect((err)=> {
             if(err){
-                // console.log(con)
-            console.log(err)
-
                 throw new Exception(Exception.CANNOT_CONNECT_MYSQL)
             }
             else {
@@ -28,7 +24,6 @@ async function connect(){
             }
             
         });
-        
 
         
         // return con

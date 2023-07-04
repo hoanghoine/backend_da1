@@ -28,7 +28,9 @@ async function connect(){
             }
             
         });
-        
+        var connection = mysql.createConnection(process.env.JAWSDB_URL);
+
+        connection.connect();
 
         
         // return con

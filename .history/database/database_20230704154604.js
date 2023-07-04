@@ -15,10 +15,8 @@ async function connect(){
             port: process.env.DBPORT,  
             timezone: 'Asia/Bangkok',
         })
-        // console.log(con)
         await con.connect((err)=> {
             if(err){
-                // console.log(con)
             console.log(err)
 
                 throw new Exception(Exception.CANNOT_CONNECT_MYSQL)
@@ -28,7 +26,6 @@ async function connect(){
             }
             
         });
-        
 
         
         // return con
