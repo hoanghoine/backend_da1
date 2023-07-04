@@ -10,9 +10,6 @@
     "debug": "node inspect server.js",
     "build": "npm run build"
 
-  },"engines": {
-    "npm": "9.7.2",
-    "node": "18.16.0"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
