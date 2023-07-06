@@ -1,8 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 import isEmail, {body, validationResult} from "express-validator";
 import moment from "moment-timezone";
-import dotenv from "dotenv"
-dotenv.config()
 
 const sequelize = new Sequelize(process.env.DBNAME,process.env.USERDB,process.env.PASSWORDDB,{
     host: process.env.HOSTDB,
