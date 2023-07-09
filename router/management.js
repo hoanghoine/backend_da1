@@ -6,10 +6,14 @@ import { userController } from '../controller/index.js'
 const router = express.Router()
 
 router.get("/get-all-user", userController.getAllUser); // lay tat ca thong tin user hien thi o trang thong tin user
+router.delete("/delete-user/:id", userController.deleteUser) // xoa theo id
+
+
+
 router.post('/createAccount/', middlewareVerifyToken.verifyAdminAuth, userController.createDocAccount) // tạo tk cho bs
 router.patch('/update-doctor-profile/', middlewareVerifyToken.verifyAdminAuth, userController.updateDoctorProfile) // update theo id
 // router.get("/get-all-user",middlewareVerifyToken.verifyAdminAuth,userController.getAllUser); // lay tat ca thong tin user hien thi o trang thong tin user
-router.delete("/delete-user/:id", middlewareVerifyToken.verifyAdminAuth, userController.deleteUser) // xoa theo id
+// router.delete("/delete-user/:id", middlewareVerifyToken.verifyAdminAuth, userController.deleteUser) // xoa theo id
 
 
 export default router
