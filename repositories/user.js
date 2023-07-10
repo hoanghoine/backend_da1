@@ -2,12 +2,12 @@ import { EventEmitter } from 'node:events'
 import { print, OutPutType } from '../helper/print.js'
 // import Sequelize from 'sequelize'
 import Jwt from 'jsonwebtoken'
-import { PdlModel, UserModel,LbsModel} from '../model/index.js'
+import { PdlModel, UserModel, LbsModel } from '../model/index.js'
 import Exception from '../error/Exception.js'
 import moment from 'moment-timezone'
 import bcrypt from 'bcrypt'
 import { uniqueId } from '../helper/UniqueId.js'
-import {auth} from '../controller/index.js'
+import { auth } from '../controller/index.js'
 import { Op } from 'sequelize'
 import { log } from 'node:console'
 
@@ -22,7 +22,7 @@ const login = async ({ email, password }) => {
 
             raw: true
         })
-        
+
         if (existingUser) {
             let isMatch = await bcrypt.compare(password, existingUser.password)
             if (!!isMatch) {
@@ -153,7 +153,12 @@ const updateUserProfile = async (userId, {
     }
 }
 const deleteUser = async (userId) => {
+    const idl = await PdlModel.findOne({ where: { IDUBN: userId } })
+    const deletedLbs = await LbsModel.destroy({ where: { IDP: idl.IDP } })
+    const deletedschedule = await PdlModel.destroy({ where: { IDUBN: userId } })
     const user = await UserModel.destroy({ where: { IDU: userId } })
+
+
     if (!user) {
         throw new Exception('cant not find user')
     }
@@ -171,37 +176,37 @@ const CreateDoctorAccount = async ({
     username,
     password
 }) => {
-    
-        let existingUser = await UserModel.findOne({ where: { username: username }, raw: true })
-        if (existingUser) {
-            throw new Exception(Exception.USER_EXIST)
-        }
-        const hashPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS))
-        const newUser = await UserModel.create({
-            IDU: uniqueId(),
-            ho_ten: name,
-            ntns: dob,
-            gioi_tinh: sex,
-            sdt: phoneNumber,
-            so_BHYT: BHYT,
-            dia_chi: address,
-            role: 3,
-            IDCK: IDCK,
-            username: username,
-            password: hashPassword
-        })
-        return newUser
+
+    let existingUser = await UserModel.findOne({ where: { username: username }, raw: true })
+    if (existingUser) {
+        throw new Exception(Exception.USER_EXIST)
+    }
+    const hashPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS))
+    const newUser = await UserModel.create({
+        IDU: uniqueId(),
+        ho_ten: name,
+        ntns: dob,
+        gioi_tinh: sex,
+        sdt: phoneNumber,
+        so_BHYT: BHYT,
+        dia_chi: address,
+        role: 3,
+        IDCK: IDCK,
+        username: username,
+        password: hashPassword
+    })
+    return newUser
 }
 
 const updateDoctorProfile = async (userId, {
-            name,
-            dob,
-            sex,
-            phoneNumber,
-            BHYT,
-            address,
-            IDCK,
-            password
+    name,
+    dob,
+    sex,
+    phoneNumber,
+    BHYT,
+    address,
+    IDCK,
+    password
 }) => {
     console.log(userId, name,
         dob,
@@ -211,47 +216,49 @@ const updateDoctorProfile = async (userId, {
         address,
         password
     )
-    try{
-        let doctorUpdating = await UserModel.findOne({ where:{
-            IDU: userId
-        }})
-        if(!doctorUpdating) {
+    try {
+        let doctorUpdating = await UserModel.findOne({
+            where: {
+                IDU: userId
+            }
+        })
+        if (!doctorUpdating) {
             throw new Exception(Exception.USER_NOT_EXIST)
         }
         // console.log(userUpdating.password)
         console.log(password)
-        const hashdPassword = await bcrypt.hash(password,parseInt(process.env.SALT_ROUNDS))
-        if(doctorUpdating){
-            doctorUpdating.ho_ten= name
-            doctorUpdating.ntns= dob
+        const hashdPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS))
+        if (doctorUpdating) {
+            doctorUpdating.ho_ten = name
+            doctorUpdating.ntns = dob
             doctorUpdating.gioi_tinh = sex
             doctorUpdating.sdt = phoneNumber
             doctorUpdating.so_BHYT = BHYT
-            doctorUpdating.dia_chi= address
+            doctorUpdating.dia_chi = address
             doctorUpdating.IDCK = IDCK
             doctorUpdating.password = hashdPassword
-            
+
 
             await doctorUpdating.save()
             return doctorUpdating
 
         }
-    } catch(exception){
+    } catch (exception) {
         throw exception
     }
 }
-const createAppointment = async({
-            id,
-            name,
-            dob,
-            sex,
-            phoneNumber,
-            BHYT,
-            address,
-            username,
-            time,
-            date,
-            idDoctor
+const createAppointment = async ({
+    id,
+    name,
+    dob,
+    sex,
+    phoneNumber,
+    BHYT,
+    address,
+    username,
+    time,
+    date,
+    idDoctor
 }) => {
     let appointment = await PdlModel.findAndCountAll({
         where: {
@@ -259,13 +266,13 @@ const createAppointment = async({
             date: date,
         }, raw: true
     })
-    if(appointment.count >= 5) {
+    if (appointment.count >= 5) {
         throw new Exception("lich kham trong gio nay da day")
     }
-    let existingUser = await UserModel.findOne({ where: {IDU: id}, raw: true })
+    let existingUser = await UserModel.findOne({ where: { IDU: id }, raw: true })
     const newIDP = uniqueId()
     const newSchedule = await PdlModel.create({
-        IDP: newIDP ,
+        IDP: newIDP,
         bookingAt: moment(appointment.bookingAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss'),
         time: time,
         date: date,
@@ -279,7 +286,7 @@ const createAppointment = async({
         IDUBN: existingUser.IDU,
         email: existingUser.username
     })
-    let docProfile = await UserModel.findOne({ where: {IDU: idDoctor}, raw: true })
+    let docProfile = await UserModel.findOne({ where: { IDU: idDoctor }, raw: true })
     let room = docProfile.work_room
     const doctorSchedule = await LbsModel.create({
         IDL: uniqueId(),
@@ -287,9 +294,9 @@ const createAppointment = async({
         time: time,
         address: room,
         IDUBS: idDoctor,
-        IDP:newIDP 
+        IDP: newIDP
     })
-    return{
+    return {
         newSchedule,
         doctorSchedule
     }
