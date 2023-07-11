@@ -1,16 +1,16 @@
-import { body,cookie,validationResult } from "express-validator";
+import { body, cookie, validationResult } from "express-validator";
 import HttpStatusCode from '../error/HttpStatusCode.js'
-import  Express  from "express";
+import Express from "express";
 import Exception from "../error/Exception.js";
-import {EventEmitter} from 'node:events'
-import {doctorRepo, userRepo} from '../repositories/index.js'
+import { EventEmitter } from 'node:events'
+import { doctorRepo, userRepo } from '../repositories/index.js'
 import user from "../repositories/user.js";
 import jwt from "jsonwebtoken";
-import {auth} from "./index.js"
+import { auth } from "./index.js"
 import { log } from "node:console";
 
-const getDoctorById = async (req,res) => {
-    let doctorID = req.query.id 
+const getDoctorById = async (req, res) => {
+    let doctorID = req.params.id
     try {
         const doctor = await doctorRepo.getDetailDoctor(doctorID)
         res.status(HttpStatusCode.OK).json({
@@ -30,8 +30,8 @@ const getDoctorById = async (req,res) => {
         })
     }
 }
-const getSpecialistById = async (req,res) => {
-    let specialistID = req.query.id 
+const getSpecialistById = async (req, res) => {
+    let specialistID = req.params.id
     try {
         const specialist = await doctorRepo.getDetailSpecialist(specialistID)
         res.status(HttpStatusCode.OK).json({
@@ -47,7 +47,7 @@ const getSpecialistById = async (req,res) => {
         })
     }
 }
-const getAllDoctor = async (req,res) => {
+const getAllDoctor = async (req, res) => {
     try {
         const doctor = await doctorRepo.getAllDoctor()
         res.status(HttpStatusCode.OK).json({
@@ -56,14 +56,14 @@ const getAllDoctor = async (req,res) => {
                 ...doctor
             }
         })
-    } catch(exception){
+    } catch (exception) {
         console.log(exception);
         res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
             message: exception.toString()
         })
     }
 }
-const getAllSpecialist = async (req,res) => {
+const getAllSpecialist = async (req, res) => {
     try {
         const specialist = await doctorRepo.getAllSpecialist()
         res.status(HttpStatusCode.OK).json({
@@ -72,7 +72,7 @@ const getAllSpecialist = async (req,res) => {
                 ...specialist
             }
         })
-    } catch(exception){
+    } catch (exception) {
         console.log(exception);
         res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
             message: exception.toString()
