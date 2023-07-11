@@ -1,7 +1,7 @@
 import HttpStatusCode from "../error/HttpStatusCode.js";
 import { userRepo } from "../repositories/index.js";
 
-const bookingAppointment = async(req,res) => {
+const bookingAppointment = async (req, res) => {
     const id = req.params.id
     const {
         name,
@@ -35,19 +35,19 @@ const bookingAppointment = async(req,res) => {
                 appointment
             }
         })
-        } catch (exception) {
+    } catch (exception) {
         res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
             message: exception.toString()
         })
     }
 }
-const cancelAppointment = async (req,res) => {
+const cancelAppointment = async (req, res) => {
     let id = req.params.id
     try {
         let appointment = await userRepo.cancelAppointment(id)
         res.status(HttpStatusCode.OK).json({
             message: "cancel appointment sucessfully",
-            data: {...appointment}
+            data: { ...appointment }
         })
     } catch (exception) {
         console.log(exception);
@@ -56,8 +56,23 @@ const cancelAppointment = async (req,res) => {
         })
     }
 }
-
-export default{
+const yourAppointment = async (req, res) => {
+    let id = req.params.id
+    try {
+        let appointment = await userRepo.yourAppointment(id)
+        res.status(HttpStatusCode.OK).json({
+            message: "your appointment sucessfully",
+            data: { ...appointment }
+        })
+    } catch (exception) {
+        console.log(exception);
+        res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
+            message: exception.toString()
+        })
+    }
+}
+export default {
     bookingAppointment,
-    cancelAppointment
+    cancelAppointment,
+    yourAppointment
 }

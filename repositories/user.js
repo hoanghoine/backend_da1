@@ -308,6 +308,13 @@ const cancelAppointment = async (id) => {
     }
     return appointment
 }
+const yourAppointment = async (id) => {
+    const appointment = await PdlModel.findAll({ where: { IDUBN: id } })
+    if (!appointment) {
+        throw new Exception('cant not find appointment')
+    }
+    return appointment
+}
 export default {
     login,
     register,
@@ -318,5 +325,6 @@ export default {
     CreateDoctorAccount,
     updateDoctorProfile,
     createAppointment,
-    cancelAppointment
+    cancelAppointment,
+    yourAppointment
 }
