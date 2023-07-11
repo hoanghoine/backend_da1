@@ -1,12 +1,12 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { Op, DataTypes, Sequelize } from "sequelize";
 import moment from "moment-timezone";
 import dotenv from "dotenv"
 dotenv.config()
 
-const sequelize = new Sequelize(process.env.DBNAME,process.env.USERDB,process.env.PASSWORDDB, {
+const sequelize = new Sequelize(process.env.DBNAME, process.env.USERDB, process.env.PASSWORDDB, {
     host: process.env.HOSTDB,
     dialect: "mysql",
-    
+
     timezone: "Asia/Bangkok",
 });
 
@@ -21,7 +21,7 @@ const Pdl = sequelize.define(
         bookingAt: {
             type: DataTypes.DATE,
             allowNull: false,
-            
+
         },
         message: {
             type: DataTypes.STRING,
@@ -67,7 +67,7 @@ const Pdl = sequelize.define(
                 },
             },
         },
-        isCancel:{
+        isCancel: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
         }

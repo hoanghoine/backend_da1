@@ -8,6 +8,7 @@ import user from "../repositories/user.js";
 import jwt from "jsonwebtoken";
 import { auth } from "./index.js"
 import { log } from "node:console";
+import { get } from "node:http";
 
 const getDoctorById = async (req, res) => {
     let doctorID = req.params.id
@@ -79,11 +80,47 @@ const getAllSpecialist = async (req, res) => {
         })
     }
 }
+const getDoctorByName = async (req, res) => {
+    let name = req.params.name
+    try {
+        const doctor = await doctorRepo.getDoctorByName(name)
+        res.status(HttpStatusCode.OK).json({
+            message: 'get doctor by name sucessfully',
+            data: {
+                ...doctor
+            }
+        })
+    } catch (exception) {
+        console.log(exception);
+        res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
+            message: exception.toString()
+        })
+    }
+}
+const getDoctorBySpecialist = async (req, res) => {
+    let specialist = req.params.specialist
+    try {
+        const doctor = await doctorRepo.getDoctorBySpecialist(specialist)
+        res.status(HttpStatusCode.OK).json({
+            message: 'get specialist sucessfully',
+            data: {
+                ...doctor
+            }
+        })
+    } catch (exception) {
+        console.log(exception);
+        res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
+            message: exception.toString()
+        })
+    }
+}
 
 export default {
     getDoctorById,
     getSpecialistById,
     getAllDoctor,
-    getAllSpecialist
+    getAllSpecialist,
+    getDoctorByName,
+    getDoctorBySpecialist
 
 }

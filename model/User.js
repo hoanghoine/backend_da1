@@ -1,10 +1,10 @@
-import { DataTypes, Sequelize } from "sequelize";
-import isEmail, {body, validationResult} from "express-validator";
+import { Op, DataTypes, Sequelize } from "sequelize";
+import isEmail, { body, validationResult } from "express-validator";
 import moment from "moment-timezone";
 import dotenv from "dotenv"
 dotenv.config()
 
-const sequelize = new Sequelize(process.env.DBNAME,process.env.USERDB,process.env.PASSWORDDB,{
+const sequelize = new Sequelize(process.env.DBNAME, process.env.USERDB, process.env.PASSWORDDB, {
     host: process.env.HOSTDB,
     dialect: 'mysql',
     timezone: 'Asia/Bangkok',
@@ -51,12 +51,12 @@ const User = sequelize.define('User', {
 
     },
     username: {
-        type: DataTypes.STRING, 
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
             isEmail: {
                 args: true,
-                msg:  'Email is incorrect format',
+                msg: 'Email is incorrect format',
             },
         },
 
@@ -75,15 +75,15 @@ const User = sequelize.define('User', {
 
 },
 
-{
-    tableName: 'user',
-    timestamps: false
-});
+    {
+        tableName: 'user',
+        timestamps: false
+    });
 User.associations = (models) => {
-    User.hasMany(models.Pdl,{ foreignKey: 'IDU'})
-    User.hasMany(models.Ck, {foreignKey: 'IDU'})
-    User.hasMany(models.Lbs,{foreignKey: 'IDU'})
-    User.belongsTo(models.Ck, {foreignKey: 'IDCK'})
+    User.hasMany(models.Pdl, { foreignKey: 'IDU' })
+    User.hasMany(models.Ck, { foreignKey: 'IDU' })
+    User.hasMany(models.Lbs, { foreignKey: 'IDU' })
+    User.belongsTo(models.Ck, { foreignKey: 'IDCK' })
 
 }
 

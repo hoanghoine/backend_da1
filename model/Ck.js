@@ -1,11 +1,11 @@
-import { DataTypes, Sequelize } from "sequelize";
-import isEmail, {body, validationResult} from "express-validator";
+import { Op, DataTypes, Sequelize } from "sequelize";
+import isEmail, { body, validationResult } from "express-validator";
 import dotenv from "dotenv"
 dotenv.config()
-const sequelize = new Sequelize(process.env.DBNAME,process.env.USERDB,process.env.PASSWORDDB,{
-    host: process.env.HOSTDB ,
+const sequelize = new Sequelize(process.env.DBNAME, process.env.USERDB, process.env.PASSWORDDB, {
+    host: process.env.HOSTDB,
     dialect: 'mysql',
-    
+
     timezone: 'Asia/Bangkok',
 })
 
@@ -33,22 +33,22 @@ const Ck = sequelize.define('Ck', {
         validate: {
             isEmail: {
                 args: true,
-                msg:  'Email is incorrect format',
+                msg: 'Email is incorrect format',
             },
         },
     },
     img: {
         type: DataTypes.STRING,
-        
+
     }
 },
-{
-    tableName: 'ck',
-    timestamps: false
-})
+    {
+        tableName: 'ck',
+        timestamps: false
+    })
 Ck.associations = (models) => {
-    User.hasMany(models.User,{ foreignKey: 'IDCK'})
-    
+    User.hasMany(models.User, { foreignKey: 'IDCK' })
+
 }
 
 
