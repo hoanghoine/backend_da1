@@ -71,7 +71,14 @@ const User = sequelize.define('User', {
     },
     work_room: {
         type: DataTypes.STRING
+    },
+    img: {
+        type: DataTypes.STRING
+    },
+    description: {
+        type: DataTypes.STRING
     }
+
 
 },
 
