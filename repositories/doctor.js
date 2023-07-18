@@ -190,7 +190,7 @@ const getDetailSpecialist = async (specialistID) => {
 
 const getAllDoctor = async () => {
     try {
-        const doctor = await UserModel.findAll({ raw: true })
+        const doctor = await UserModel.findAll({ where: { role: 3 }, raw: true })
         return doctor
     } catch (exception) {
         throw exception
