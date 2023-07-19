@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv"
-import cors from 'cors'
+// import cors from 'cors'
 import cookieParser from "cookie-parser";
 import connect from "./database/database.js";
 import { OutPutType, print } from "./helper/print.js";
@@ -9,10 +9,18 @@ import bodyParser from 'body-parser'
 
 dotenv.config()
 const app = express()
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-}))
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true'); // Cho phép trình duyệt lưu trữ cookie
+
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+        return res.status(200).json({});
+    }
+
+    next();
+});
 app.use(express.json())// đảm bảo rằng dữ liệu được gửi đến từ yêu cầu HTTP với kiểu Content-Type là application/json sẽ được phân tích và chuyển đổi thành JavaScript object
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
