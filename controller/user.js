@@ -39,7 +39,7 @@ const login = async (req, res) => {
             message: 'login user successfully',
             data: {
                 ...existingUser,
-                refreshToken: 'not show'
+                // refreshToken: 'not show'
             }
         })
 
