@@ -11,11 +11,6 @@ dotenv.config()
 const app = express()
 app.use(cors({
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
-    credentials: true,
-    allowedHeaders: 'Content-Type, Authorization, Origin, X-Requested-With, Accept',
-    exposedHeaders: ['Content-Range', 'X-Content-Range'],
-
 }))
 app.use(express.json())// đảm bảo rằng dữ liệu được gửi đến từ yêu cầu HTTP với kiểu Content-Type là application/json sẽ được phân tích và chuyển đổi thành JavaScript object
 app.use(bodyParser.urlencoded({ extended: false }));
