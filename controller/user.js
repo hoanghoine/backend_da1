@@ -1,38 +1,39 @@
-import { body,cookie,validationResult } from "express-validator";
+import { body, cookie, validationResult } from "express-validator";
 import HttpStatusCode from '../error/HttpStatusCode.js'
-import  Express  from "express";
+import Express from "express";
 import Exception from "../error/Exception.js";
-import {EventEmitter} from 'node:events'
-import {userRepo} from '../repositories/index.js'
+import { EventEmitter } from 'node:events'
+import { userRepo } from '../repositories/index.js'
 import user from "../repositories/user.js";
 import User from "../model/User.js";
 import jwt from "jsonwebtoken";
-import {auth} from "./index.js"
+import { auth } from "./index.js"
 // import User from "../model/User.js";
 // import { Sequelize,json } from "sequelize";
 
 const myEvent = new EventEmitter()
-myEvent.on('event.register.user',(params)=>{
+myEvent.on('event.register.user', (params) => {
     //listen
     console.log(`they talk about:${JSON.stringify(params)}`)
 })
 
 //login
-const login = async(req,res) => {
+const login = async (req, res) => {
     debugger
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(HttpStatusCode.BAD_REQUEST).json({errors: errors.array() })
+    if (!errors.isEmpty()) {
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ errors: errors.array() })
     }
-    const {email, password} = req.body
+    const { email, password } = req.body
     // res.send(`${email} : ${password}`)
     try {
-        let existingUser = await userRepo.login({email,password})
+        let existingUser = await userRepo.login({ email, password })
         debugger
-        res.cookie('refreshToken',existingUser.refreshToken,{
+        res.cookie('refreshToken', existingUser.refreshToken, {
             httpOnly: true,
+            secure: false,
             expires: new Date(Date.now() + 3600000),
-            sameSite: 'strict',
+            // sameSite: 'strict',
             path: '/',
         })
         res.status(HttpStatusCode.OK).json({
@@ -42,8 +43,8 @@ const login = async(req,res) => {
                 refreshToken: 'not show'
             }
         })
-        
-    } catch(exception) {
+
+    } catch (exception) {
         console.log(exception)
         res.status(HttpStatusCode.UNAUTH).json({
             message: exception.toString()
@@ -57,11 +58,11 @@ const logout = (req, res) => {
     res.status(302).send("Đăng xuất thành công");
 }
 //register
-const register = async(req,res) => {
-    
+const register = async (req, res) => {
+
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(HttpStatusCode.BAD_REQUEST).json({errors: errors.array() })
+    if (!errors.isEmpty()) {
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ errors: errors.array() })
     }
     const {
         name,
@@ -88,7 +89,7 @@ const register = async(req,res) => {
             message: "register sucessfully",
             data: userR.toJSON()
         })
-    } catch(exception){
+    } catch (exception) {
         console.log(exception)
         res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
             message: exception.toString()
@@ -98,33 +99,33 @@ const register = async(req,res) => {
 
 
 //get detail user
-const getDetailUser = async(req,res) => {
+const getDetailUser = async (req, res) => {
     let userID = req.params.id
     try {
         const user = await userRepo.getDetailUser(userID)
         res.status(HttpStatusCode.OK).json({
             message: 'get detail User sucessfully',
-            data : {
+            data: {
                 ...user,
                 // id: 'not show',
                 password: 'notshow',
             }
         })
-    } catch(exception){
+    } catch (exception) {
         res.status(HttpStatusCode.UNAUTH).json({
             message: exception.toString()
         })
     }
 }
 
-const getAllUser = async(req,res) => {
+const getAllUser = async (req, res) => {
     try {
         const user = await userRepo.getAllUser()
         res.status(HttpStatusCode.OK).json({
             message: 'get  User sucessfully',
-            data : {
+            data: {
                 user
-                
+
             }
         })
     } catch (exception) {
@@ -135,7 +136,7 @@ const getAllUser = async(req,res) => {
     }
 }
 
-const updateProfile = async(req,res) => {
+const updateProfile = async (req, res) => {
     let userID = req.params.id
     const {
         name,
@@ -146,9 +147,9 @@ const updateProfile = async(req,res) => {
         address,
         password
     } = req.body
-    
+
     try {
-        let updatedUser = await userRepo.updateUserProfile( userID,{
+        let updatedUser = await userRepo.updateUserProfile(userID, {
             name,
             dob,
             sex,
@@ -157,12 +158,12 @@ const updateProfile = async(req,res) => {
             address,
             password
         })
-        
+
         res.status(HttpStatusCode.OK).json({
             message: 'update User sucessfully',
-            data : updatedUser
-                
-            
+            data: updatedUser
+
+
         })
     } catch (exception) {
         console.log(exception)
@@ -173,31 +174,31 @@ const updateProfile = async(req,res) => {
 }
 
 
-const deleteUser = async(req,res) => {
+const deleteUser = async (req, res) => {
     let userID = req.params.id
     try {
         const user = await userRepo.deleteUser(userID)
         res.status(HttpStatusCode.OK).json({
             message: 'delete User sucessfully',
-            
+
         })
-    } catch(exception){
+    } catch (exception) {
         console.log(exception)
         res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
             message: exception.toString()
         })
     }
-    
+
 }
 
-const reqRefreshToken = async (req,res) => {
+const reqRefreshToken = async (req, res) => {
     //take refresh token from user
     const refreshToken = req.cookies.refreshToken
     // console.log(refreshToken)
-    if(!refreshToken) return res.status(HttpStatusCode.UNAUTH).json("you are not authenticated")
-    jwt.verify(refreshToken,process.env.JWT_REFRESH, (err,user) => {
+    if (!refreshToken) return res.status(HttpStatusCode.UNAUTH).json("you are not authenticated")
+    jwt.verify(refreshToken, process.env.JWT_REFRESH, (err, user) => {
         // user ơ day co dang { id: 11, role: '1', iat: 1687342478, exp: 1687428878 }
-        if(err){
+        if (err) {
             console.log(err)
             res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
                 message: err.toString()
@@ -207,21 +208,22 @@ const reqRefreshToken = async (req,res) => {
 
         const newAccessToken = auth.createAccessToken(user)
         const newRefreshToken = auth.createRefreshToken(user)
-    
+
 
         // userRepo.savenewRefreshToken(newRefreshToken)
         res.cookie("refreshToken", newRefreshToken, {
             httpOnly: true,
+            secure: false,
             expires: new Date(Date.now() + 3600000),
             path: '/',
             // sameSite: 'strict'
         })
-        res.status(HttpStatusCode.OK).json({accessToken: newAccessToken})
+        res.status(HttpStatusCode.OK).json({ accessToken: newAccessToken })
 
     })
 }
 
-const createDocAccount = async (req,res) => {
+const createDocAccount = async (req, res) => {
     const {
         name,
         dob,
@@ -249,7 +251,7 @@ const createDocAccount = async (req,res) => {
             message: "register sucessfully",
             data: userR.toJSON()
         })
-    } catch(exception){
+    } catch (exception) {
         console.log(exception)
         res.status(HttpStatusCode.INTERNEL_SERVER_ERROR).json({
             message: exception.toString()
@@ -257,9 +259,9 @@ const createDocAccount = async (req,res) => {
     }
 }
 
-const updateDoctorProfile = async(req,res)=>{
+const updateDoctorProfile = async (req, res) => {
     // let doctorID =  req.params.id //http://localhost:3002/management/update-doctor-profile/16871355379923988
-    let doctorID =  req.query.id //http://localhost:3002/management/update-doctor-profile?id=16871355379923988
+    let doctorID = req.query.id //http://localhost:3002/management/update-doctor-profile?id=16871355379923988
 
     const {
         name,
@@ -272,7 +274,7 @@ const updateDoctorProfile = async(req,res)=>{
         password
     } = req.body
     try {
-        let updatedDoctor = await userRepo.updateDoctorProfile(doctorID,{
+        let updatedDoctor = await userRepo.updateDoctorProfile(doctorID, {
             name,
             dob,
             sex,
@@ -286,7 +288,7 @@ const updateDoctorProfile = async(req,res)=>{
             message: "update doctor profile sucessfully",
             data: updatedDoctor
         })
-    }  catch(exception){
+    } catch (exception) {
         console.log(exception)
         res.status(HttpStatusCode.UNAUTH).json({
             message: exception.toString()
@@ -294,7 +296,7 @@ const updateDoctorProfile = async(req,res)=>{
     }
 }
 // doctor in main page
-export default{
+export default {
     login,
     logout,
     register,
