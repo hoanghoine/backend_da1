@@ -19,6 +19,7 @@ myEvent.on('event.register.user', (params) => {
 
 //login
 const login = async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     debugger
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -192,6 +193,7 @@ const deleteUser = async (req, res) => {
 }
 
 const reqRefreshToken = async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     //take refresh token from user
     const refreshToken = req.cookies.refreshToken
     // console.log(refreshToken)
