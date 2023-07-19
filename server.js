@@ -10,7 +10,7 @@ import bodyParser from 'body-parser'
 dotenv.config()
 const app = express()
 app.use(cors({
-    origin: '*',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
     credentials: true,
     allowedHeaders: 'Content-Type, Authorization, Origin, X-Requested-With, Accept',
