@@ -2,7 +2,6 @@ import express from "express";
 import { userController } from '../controller/index.js'
 import middlewareVerifyToken from "../controller/middlewareController.js";
 import { ExpressValidator, body } from "express-validator";
-import cors from 'cors'
 
 
 const router = express.Router();
@@ -30,7 +29,7 @@ router.get("/:id", middlewareVerifyToken.verifyGetUserById, userController.getDe
 // Route quên mật khẩu
 router.post("/forgot-password",)
 
-router.post("/refresh-token", cors(), userController.reqRefreshToken)
+router.post("/refresh-token", userController.reqRefreshToken)
 // Route cập nhật thông tin tài khoản
 router.patch("/:id", middlewareVerifyToken.verifyGetUserById, userController.updateProfile);
 //delete for admin

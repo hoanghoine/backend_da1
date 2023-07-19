@@ -19,7 +19,6 @@ myEvent.on('event.register.user', (params) => {
 
 //login
 const login = async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
     debugger
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -32,9 +31,8 @@ const login = async (req, res) => {
         debugger
         res.cookie('refreshToken', existingUser.refreshToken, {
             httpOnly: true,
-            secure: false,
             expires: new Date(Date.now() + 3600000),
-            // sameSite: 'strict',
+            sameSite: 'strict',
             path: '/',
         })
         res.status(HttpStatusCode.OK).json({
@@ -193,7 +191,6 @@ const deleteUser = async (req, res) => {
 }
 
 const reqRefreshToken = async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
     //take refresh token from user
     const refreshToken = req.cookies.refreshToken
     // console.log(refreshToken)
@@ -215,7 +212,6 @@ const reqRefreshToken = async (req, res) => {
         // userRepo.savenewRefreshToken(newRefreshToken)
         res.cookie("refreshToken", newRefreshToken, {
             httpOnly: true,
-            secure: false,
             expires: new Date(Date.now() + 3600000),
             path: '/',
             // sameSite: 'strict'
