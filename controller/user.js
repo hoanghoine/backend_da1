@@ -35,6 +35,12 @@ const login = async (req, res) => {
             sameSite: 'strict',
             path: '/',
         })
+        res.cookie('refreshToken', existingUser.accessToken, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 30000),
+            sameSite: 'strict',
+            path: '/',
+        })
         res.status(HttpStatusCode.OK).json({
             message: 'login user successfully',
             data: {
