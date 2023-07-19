@@ -7,7 +7,7 @@ import cors from 'cors'
 
 const router = express.Router();
 router.post(
-    "/login",
+    "/login", cors(),
     body("email").isEmail(),
     body("password").isLength({ min: 7 }),
     userController.login
