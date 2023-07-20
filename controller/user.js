@@ -29,12 +29,12 @@ const login = async (req, res) => {
     try {
         let existingUser = await userRepo.login({ email, password })
         debugger
-        // res.cookie('refreshToken', existingUser.refreshToken, {
-        //     httpOnly: true,
-        //     expires: new Date(Date.now() + 3600000),
-        //     sameSite: 'strict',
-        //     path: '/',
-        // })
+        res.cookie('refreshToken', existingUser.refreshToken, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 3600000),
+            sameSite: 'strict',
+            path: '/',
+        })
         // res.cookie('accessToken', existingUser.accessToken, {
         //     httpOnly: true,
         //     expires: new Date(Date.now() + 30000),
