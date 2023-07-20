@@ -29,18 +29,18 @@ const login = async (req, res) => {
     try {
         let existingUser = await userRepo.login({ email, password })
         debugger
-        res.cookie('refreshToken', existingUser.refreshToken, {
-            httpOnly: true,
-            expires: new Date(Date.now() + 3600000),
-            sameSite: 'strict',
-            path: '/',
-        })
-        res.cookie('refreshToken', existingUser.accessToken, {
-            httpOnly: true,
-            expires: new Date(Date.now() + 30000),
-            sameSite: 'strict',
-            path: '/',
-        })
+        // res.cookie('refreshToken', existingUser.refreshToken, {
+        //     httpOnly: true,
+        //     expires: new Date(Date.now() + 3600000),
+        //     sameSite: 'strict',
+        //     path: '/',
+        // })
+        // res.cookie('accessToken', existingUser.accessToken, {
+        //     httpOnly: true,
+        //     expires: new Date(Date.now() + 30000),
+        //     sameSite: 'strict',
+        //     path: '/',
+        // })
         res.status(HttpStatusCode.OK).json({
             message: 'login user successfully',
             data: {
@@ -222,7 +222,7 @@ const reqRefreshToken = async (req, res) => {
             path: '/',
             // sameSite: 'strict'
         })
-        res.status(HttpStatusCode.OK).json({ accessToken: newAccessToken })
+        res.status(HttpStatusCode.OK).json({ accessToken: newAccessToken, refreshToken: newRefreshToken })
 
     })
 }
