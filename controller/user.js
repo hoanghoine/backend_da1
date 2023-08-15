@@ -92,7 +92,7 @@ const register = async (req, res) => {
         })
         res.status(HttpStatusCode.OK).json({
             message: "register sucessfully",
-            data: userR.toJSON()
+            // data: userR.toJSON()
         })
     } catch (exception) {
         console.log(exception)
