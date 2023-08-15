@@ -174,7 +174,10 @@ const getDetailDoctor = async (doctorID) => {
     if (!doctor) {
         throw new Exception('cant not find doctor')
     }
-    return doctor
+    let specialist = await CkModel.findOne({ where: { IDCK: doctor[key].IDCK }, raw: true })
+    let result = { ...doctor, specialist: specialist }
+
+    return result
 }
 const getDetailSpecialist = async (specialistID) => {
     const specialist = await CkModel.findOne({
