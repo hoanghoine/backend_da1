@@ -154,7 +154,10 @@ const updateUserProfile = async (userId, {
 }
 const deleteUser = async (userId) => {
     const idl = await PdlModel.findOne({ where: { IDUBN: userId } })
-    const deletedLbs = await LbsModel.destroy({ where: { IDP: idl.IDP } })
+    if (idl) {
+        const deletedLbs = await LbsModel.destroy({ where: { IDP: idl.IDP } })
+    }
+
     const deletedschedule = await PdlModel.destroy({ where: { IDUBN: userId } })
     const user = await UserModel.destroy({ where: { IDU: userId } })
 
@@ -249,13 +252,13 @@ const updateDoctorProfile = async (userId, {
 }
 const createAppointment = async ({
     id,
-    name,
-    dob,
-    sex,
-    phoneNumber,
-    BHYT,
-    address,
-    username,
+    // name,
+    // dob,
+    // sex,
+    // phoneNumber,
+    // BHYT,
+    // address,
+    // username,
     time,
     date,
     idDoctor
