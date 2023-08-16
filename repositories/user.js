@@ -252,13 +252,13 @@ const updateDoctorProfile = async (userId, {
 }
 const createAppointment = async ({
     id,
-    // name,
-    // dob,
-    // sex,
-    // phoneNumber,
-    // BHYT,
-    // address,
-    // username,
+    name,
+    dob,
+    sex,
+    phoneNumber,
+    BHYT,
+    address,
+    username,
     time,
     date,
     idDoctor
@@ -279,15 +279,15 @@ const createAppointment = async ({
         bookingAt: moment(appointment.bookingAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss'),
         time: time,
         date: date,
-        address: existingUser.dia_chi,
-        BHYT: existingUser.so_BHYT,
-        phoneNumber: existingUser.sdt,
-        sex: existingUser.gioi_tinh,
-        dob: existingUser.ntns,
-        name: existingUser.ho_ten,
+        address: address,
+        BHYT: BHYT,
+        phoneNumber: phoneNumber,
+        sex: sex,
+        dob: dob,
+        name: name,
         IDBS: idDoctor,
         IDUBN: existingUser.IDU,
-        email: existingUser.username
+        email: username
     })
     let docProfile = await UserModel.findOne({ where: { IDU: idDoctor }, raw: true })
     let room = docProfile.work_room
