@@ -110,7 +110,7 @@ const doctorCreateAppointment = async ({
             IDBS: idDoctor,
             IDUBN: existingUser.IDU,
             email: existingUser.username,
-            isCancel: false
+            isCancel: 0
         })
         const doctorSchedule = await LbsModel.create({
             IDL: uniqueId(),
@@ -118,7 +118,9 @@ const doctorCreateAppointment = async ({
             time: time,
             address: room,
             IDUBS: idDoctor,
-            IDP: newIDP
+            IDP: newIDP,
+            isCancel: 0
+
         })
         return {
             newRegister,
@@ -147,7 +149,7 @@ const doctorCreateAppointment = async ({
             IDBS: idDoctor,
             IDUBN: existingUser.IDU,
             email: existingUser.username,
-            isCancel: false
+            isCancel: 0
 
         })
         let docProfile = await UserModel.findOne({ where: { IDU: idDoctor }, raw: true })
@@ -158,7 +160,9 @@ const doctorCreateAppointment = async ({
             time: time,
             address: room,
             IDUBS: idDoctor,
-            IDP: newIDP
+            IDP: newIDP,
+            isCancel: 0
+
         })
         return {
             newSchedule,
