@@ -110,7 +110,7 @@ const doctorCreateAppointment = async ({
             IDBS: idDoctor,
             IDUBN: existingUser.IDU,
             email: existingUser.username,
-            isCancel: 0
+            isCancel: false
         })
         const doctorSchedule = await LbsModel.create({
             IDL: uniqueId(),
