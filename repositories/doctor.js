@@ -146,7 +146,9 @@ const doctorCreateAppointment = async ({
             name: existingUser.ho_ten,
             IDBS: idDoctor,
             IDUBN: existingUser.IDU,
-            email: existingUser.username
+            email: existingUser.username,
+            isCancel: false
+
         })
         let docProfile = await UserModel.findOne({ where: { IDU: idDoctor }, raw: true })
         let room = docProfile.work_room
