@@ -233,7 +233,15 @@ const getDoctorByName = async (name) => {
 
             }, raw: true
         })
-        return doctor
+        let result = {}
+        for (let key in doctor) {
+            if (doctor.hasOwnProperty(key)) {
+                let specialist = await CkModel.findOne({ where: { IDCK: doctor[key].IDCK }, raw: true })
+                result[key] = { ...doctor[key], specialist: specialist }
+            }
+        }
+        return result
+        // return doctor
     } catch (exception) {
         throw exception
     }
